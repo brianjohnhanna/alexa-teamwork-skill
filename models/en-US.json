@@ -1,0 +1,121 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "types": [{
+        "name": "company",
+        "values": [{
+            "id": "55675",
+            "name": {
+              "value": "glance",
+              "synonyms": []
+            }
+          },
+          {
+            "id": "47848",
+            "name": {
+              "value": "add co",
+              "synonyms": []
+            }
+          },
+          {
+            "id": "73903",
+            "name": {
+              "value": "MASS",
+              "synonyms": [
+                "mass"
+              ]
+            }
+          },
+          {
+            "id": "47173",
+            "name": {
+              "value": "stirling technologies",
+              "synonyms": [
+                "stirling",
+                "our company",
+                "us"
+              ]
+            }
+          }
+        ]
+      }],
+      "intents": [{
+          "name": "AMAZON.CancelIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": []
+        },
+        {
+          "name": "ProjectsIntent",
+          "samples": [
+            "projects",
+            "projects by company",
+            "projects for a company",
+            "get me projects",
+            "give me projects"
+          ],
+          "slots": []
+        },
+        {
+          "name": "TasksByCompanyIntent",
+          "samples": [
+            "get all tasks for {company}",
+            "get tasks",
+            "tell me the tasks",
+            "find tasks",
+            "find tasks for {company}"
+          ],
+          "slots": [{
+            "name": "company",
+            "type": "company",
+            "samples": [
+              "{company}",
+              "for {company}",
+              "get me tasks for {company}",
+              "the tasks for {company}"
+            ]
+          }]
+        }
+      ],
+      "invocationName": "teamwork"
+    },
+    "prompts": [{
+      "id": "Elicit.Intent-TasksByCompanyIntent.IntentSlot-company",
+      "variations": [{
+          "type": "PlainText",
+          "value": "What company's tasks to you want me to get?"
+        },
+        {
+          "type": "PlainText",
+          "value": "For which company?"
+        },
+        {
+          "type": "PlainText",
+          "value": "Tell me the company you want to hear the tasks for"
+        }
+      ]
+    }],
+    "dialog": {
+      "intents": [{
+        "name": "TasksByCompanyIntent",
+        "confirmationRequired": false,
+        "prompts": {},
+        "slots": [{
+          "name": "company",
+          "type": "company",
+          "elicitationRequired": true,
+          "confirmationRequired": false,
+          "prompts": {
+            "elicitation": "Elicit.Intent-TasksByCompanyIntent.IntentSlot-company"
+          }
+        }]
+      }]
+    }
+  }
+}

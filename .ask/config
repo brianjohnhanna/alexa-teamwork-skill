@@ -1,0 +1,19 @@
+{
+  "deploy_settings": {
+    "default": {
+      "skill_id": "amzn1.ask.skill.6d69b80a-34ed-4c2a-88de-91fcdbc39c6f",
+      "was_cloned": false,
+      "merge": {
+        "skillManifest": {
+          "apis": {
+            "custom": {
+              "endpoint": {
+                "uri": "teamworkAlexaSkill"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
