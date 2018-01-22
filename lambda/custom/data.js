@@ -1,29 +1,21 @@
-/**
- * Data Processing
- */
-const _ = require('lodash');
-const didYouMean = require('didYouMean');
-
-/**
- * API Libraries
- */
-const Api = require('./api/projects');
-const Companies = require('./api/companies');
+const _ = require('lodash')
+const didYouMean = require('didYouMean')
+const Api = require('./api')
 
 const getProjectCompanyNames = () => {
-    return Api.getActiveProjects()
+    return Api.Projects.all()
         .then((response) => response.json())
         .then((responseJson) => {
-            const projects = responseJson.projects;
+            const projects = responseJson.projects
             const companies = projects.map(project => {
-                return project.company.name;
+                return project.company.name
             })
             return _.uniq(companies)
     })
 }
 
 const getCompanies = () => {
-    return Companies.all()
+    return Api.Companies.all()
         .then((response) => response.json())
         .then((responseJson) => {
             return responseJson.companies
@@ -31,11 +23,11 @@ const getCompanies = () => {
 }
 
 const searchCompanies = (search) => {
-    didYouMean.returnWinningObject = true;
+    didYouMean.returnWinningObject = true
     return getCompanies()
         .then(companies => {
-            return didYouMean(search, companies, 'name');
-        });
+            return didYouMean(search, companies, 'name')
+        })
 }
 
 module.exports = {
