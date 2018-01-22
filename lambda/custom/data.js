@@ -1,8 +1,8 @@
 const _ = require('lodash');
-const Api = require('./api/projects');
+const ProjectsApi = require('./api/projects');
 
 const getProjectCompanyNames = () => {
-    return Api.getActiveProjects()
+    return ProjectsApi.getActive()
         .then((response) => response.json())
         .then((responseJson) => {
             const projects = responseJson.projects;
