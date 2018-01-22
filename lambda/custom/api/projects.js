@@ -1,14 +1,14 @@
-const config = require('./config');
-const fetch = require('node-fetch');
+const config = require('./config')
+const fetch = require('node-fetch')
 
 module.exports = {
-    getActive: function() {
-        return fetch(`${config.baseUri}/projects.json?orderby=companyName`, config.defaultAjaxOptions);
+    all: function() {
+        return fetch(`${config.baseUri}/projects.json?orderby=companyName`, config.ajax.defaultOptions)
     },
     get: function(projectId) {
-        return fetch(`${config.baseUri}/projects/${projectId}.json`, config.defaultAjaxOptions);
+        return fetch(`${config.baseUri}/projects/${projectId}.json`, config.ajax.defaultOptions)
     },
-    getStarred: function() {
-        return fetch(`${config.baseUri}/projects/starred.json`, config.defaultAjaxOptions);
+    tasks: function(projectId) {
+        return fetch(`${config.baseUri}/projects/${projectId}/tasks.json`, config.ajax.defaultOptions)
     }
 }

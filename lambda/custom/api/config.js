@@ -1,4 +1,4 @@
-const base64 = require('base-64');
+const base64 = require('base-64')
 
 module.exports = {
     apiKey: process.env.TEAMWORK_API_KEY,
@@ -7,7 +7,7 @@ module.exports = {
         defaultOptions: {
             method: 'GET',
             headers: {
-                'Authorization': `Basic ${base64.encode(config.apiKey + ':XXXXXXXX')}`
+                'Authorization': `Basic ${base64.encode(this.apiKey + ':XXXXXXXX')}`
             }
         }
     }
