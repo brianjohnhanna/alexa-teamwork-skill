@@ -19,6 +19,12 @@ exports.handler = function(event, context, callback) {
     alexa.execute();
 };
 
+const handleError = (error) => {
+    this.response.cardRenderer(SKILL_NAME, 'There was an error. Sorry.');
+    this.response.speak('There was an error. Sorry.');
+    this.emit(':responseReady');
+}
+
 const handlers = {
     'LaunchRequest': function () {
         this.emit('TasksByCompanyIntent');
@@ -29,9 +35,7 @@ const handlers = {
             this.response.speak(`There are ${response.length} currently active projects.`);
             this.emit(':responseReady');
         }).catch(error => {
-            this.response.cardRenderer(SKILL_NAME, 'There was an error. Sorry.');
-            this.response.speak('There was an error. Sorry.');
-            this.emit(':responseReady');
+            handleError(error).bind(this);
         })
     },
     'TasksByCompanyIntent': function () {
