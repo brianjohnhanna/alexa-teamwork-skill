@@ -35,10 +35,21 @@ const handlers = {
         })
     },
     'TasksByCompanyIntent': function () {
-        var company = this.event.request.intent.slots.company.value;
-        this.response.cardRenderer(SKILL_NAME, `This is a list of tasks for ${company}...`);
-        this.response.speak(`This is a list of tasks for ${company}...`);
-        this.emit(':responseReady');
+        const input = this.event.request.intent.slots.Company.value;
+        Data.searchCompanies(input).then(result => {
+            if (!result) {
+                this.response.cardRenderer(SKILL_NAME, `No company found...`);
+                this.response.speak(`Sorry, I couldn't find any company by that name.`);
+                this.emit(':responseReady');
+            } else {
+                const company = result;
+                this.response.cardRenderer(SKILL_NAME, `Here is a list of tasks for ${company.name}...`);
+                this.response.speak(`Here's is a list of tasks for ${company.name}...`);
+                this.emit(':responseReady');
+            }
+        }).catch(error => {
+            handleError(error).bind(this);
+        })
     },
     'AMAZON.HelpIntent': function () {
         const speechOutput = HELP_MESSAGE;
