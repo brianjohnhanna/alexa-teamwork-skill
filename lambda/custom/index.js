@@ -20,54 +20,61 @@ exports.handler = function(event, context, callback) {
 };
 
 const handleError = (error) => {
-    this.response.cardRenderer(SKILL_NAME, 'There was an error. Sorry.');
-    this.response.speak('There was an error. Sorry.');
-    this.emit(':responseReady');
+    this.response.cardRenderer(SKILL_NAME, 'There was an error. Sorry.')
+    this.response.speak('There was an error. Sorry.')
+    this.emit(':responseReady')
 }
 
 const handlers = {
     'LaunchRequest': function () {
-        this.emit('TasksByCompanyIntent');
+        this.emit('ProjectsIntent');
     },
     'ProjectsIntent': function () {
         Data.getProjectCompanyNames().then((response) => {
-            this.response.cardRenderer(SKILL_NAME, response.join('\n'));
-            this.response.speak(`There are ${response.length} currently active projects.`);
-            this.emit(':responseReady');
+            this.response.cardRenderer(SKILL_NAME, response.join('\n'))
+            this.response.speak(`There are ${response.length} companies with currently active projects.`)
+            this.emit(':responseReady')
         }).catch(error => {
-            handleError(error).bind(this);
+            this.response.cardRenderer(SKILL_NAME, 'There was an error. Sorry.')
+            this.response.speak('There was an error. Sorry.')
+            this.emit(':responseReady')
         })
     },
     'TasksByCompanyIntent': function () {
-        const input = this.event.request.intent.slots.Company.value;
-        Data.searchCompanies(input).then(result => {
+        const input = this.event.request.intent.slots.company.value
+        Data.searchCompanies(input).then((result) => {
             if (!result) {
-                this.response.cardRenderer(SKILL_NAME, `No company found...`);
-                this.response.speak(`Sorry, I couldn't find any company by that name.`);
-                this.emit(':responseReady');
+                this.response.cardRenderer(SKILL_NAME, 'No company found...')
+                this.response.speak("Sorry, I couldn't find any company by that name.")
+                this.emit(':responseReady')
             } else {
-                const company = result;
-                this.response.cardRenderer(SKILL_NAME, `Here is a list of tasks for ${company.name}...`);
-                this.response.speak(`Here's is a list of tasks for ${company.name}...`);
-                this.emit(':responseReady');
+                const company = result
+                Data.getCompanyTasks(company.id).then(projects => {
+                    this.response.cardRenderer(SKILL_NAME, projects.map(project => project.name).join('\n'))
+                    this.response.speak(`There are ${projects.length} projects for ${company.name}`)
+                    this.emit(':responseReady')
+                })
             }
         }).catch(error => {
-            handleError(error).bind(this);
+            console.log(error)
+            this.response.cardRenderer(SKILL_NAME, 'There was an error. Sorry.')
+            this.response.speak('There was an error. Sorry.')
+            this.emit(':responseReady')
         })
     },
     'AMAZON.HelpIntent': function () {
         const speechOutput = HELP_MESSAGE;
         const reprompt = HELP_REPROMPT;
 
-        this.response.speak(speechOutput).listen(reprompt);
-        this.emit(':responseReady');
+        this.response.speak(speechOutput).listen(reprompt)
+        this.emit(':responseReady')
     },
     'AMAZON.CancelIntent': function () {
-        this.response.speak(STOP_MESSAGE);
-        this.emit(':responseReady');
+        this.response.speak(STOP_MESSAGE)
+        this.emit(':responseReady')
     },
     'AMAZON.StopIntent': function () {
-        this.response.speak(STOP_MESSAGE);
-        this.emit(':responseReady');
+        this.response.speak(STOP_MESSAGE)
+        this.emit(':responseReady')
     },
 };
